@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroLab Pro - Analytics Practice E-Commerce</title>
+    <style>
+        /* Base Styling & Variables */
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1d4ed8;
+            --accent: #10b981;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 60px;
+        }
+
+        /* Navigation Bar */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary-hover);
+        }
+
+        .cart-link {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 11px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Hero & Filters */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .hero h2 { margin-bottom: 10px; font-size: 28px; }
+
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filter-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Product Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-cover: cover;
+            background-color: #f3f4f6;
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-cat {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .product-title:hover { color: var(--primary-hover); }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price { font-size: 18px; font-weight: bold; }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--accent); }
+        .btn-success:hover { background-color: #059669; }
+
+        /* Pages Setup (Hidden by default) */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Product Detail Page Styling */
+        .detail-wrapper {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .detail-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: var(--primary); font-weight: 600; cursor: pointer; }
+
+        /* Cart Page Styling */
+        .cart-wrapper { background-color: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); }
+        .cart-item-info { display: flex; align-items: center; gap: 15px; }
+        .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-weight: 600; }
+        .cart-total-section { text-align: right; margin-top: 30px; }
+        .total-price { font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+
+        /* Order Success Page Styling */
+        .success-box { background-color: var(--card-bg); padding: 50px; text-align: center; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .success-icon { font-size: 60px; color: var(--accent); margin-bottom: 20px; }
+
+        /* Analytics Live Console Log Widget */
+        .analytics-widget {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 320px;
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+            font-family: monospace;
+            font-size: 11px;
+            z-index: 1000;
+        }
+
+        .widget-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 5px; margin-bottom: 8px; font-weight: bold; color: #94a3b8; }
+        .widget-logs { hieght: 150px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+        .log-ev { color: #34d399; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo" onclick="navigateTo('home-page')">⚡ ElectroLab Pro</div>
+            <nav>
+                <a onclick="navigateTo('home-page')">Home</a>
+                <a onclick="openCart()" class="cart-link">Cart 🛒 <span id="cart-badge" class="cart-badge">0</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section id="home-page" class="page active">
+            <div class="hero">
+                <h2>Electronics Analytics Sandbox</h2>
+                <p>৫২টি রিয়েল প্রোডাক্ট ভ্যারিয়েশন এবং ৪টি ডেডিকেটেড পেজ দিয়ে অ্যানালিটিক্স ট্র্যাকিং টেস্ট করুন।</p>
+            </div>
+            
+            <div class="filter-container" id="filter-bar">
+                </div>
+
+            <div class="grid" id="product-grid">
+                </div>
+        </section>
+
+        <section id="detail-page" class="page">
+            <span class="back-btn" onclick="navigateTo('home-page')">&larr; Back to Shop</span>
+            <div class="detail-wrapper" id="detail-content">
+                </div>
+        </section>
+
+        <section id="cart-page" class="page">
+            <div class="cart-wrapper">
+                <h2 style="margin-bottom: 20px;">Your Shopping Cart</h2>
+                <div id="cart-items-container">
+                    </div>
+                <div class="cart-total-section">
+                    <div class="total-price">Total: $<span id="total-amount">0</span></div>
+                    <button class="btn btn-success" onclick="processCheckout()">Place Order / Checkout</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="success-page" class="page">
+            <div class="success-box">
+                <div class="success-icon">✓</div>
+                <h2 style="margin-bottom: 10px;">Order Placed Successfully!</h2>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">আপনার পারচেজ ইভেন্টটি অ্যানালিটিক্স ডেটা লেয়ারে সাকসেসফুলি ফায়ার হয়েছে।</p>
+                <button class="btn" onclick="navigateTo('home-page')">Continue Shopping</button>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="analytics-widget">
+        <div class="widget-header">
+            <span>📊 Analytics Log Console</span>
+            <span style="cursor:pointer; text-decoration: underline;" onclick="document.getElementById('live-logs').innerHTML=''">Clear</span>
+        </div>
+        <div class="widget-logs" id="live-logs">
+            <span style="color:#64748b">// Real-time event log ready...</span>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Generation of 52 Electronics Products Data ---
+        const categories = ["Audio", "Wearables", "Accessories", "Displays", "Cameras", "Storage", "Smart Home", "Gaming"];
+        const imagePools = {
+            "Audio": ["https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&auto=format&fit=crop&q=60"],
+            "Wearables": ["https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&auto=format&fit=crop&q=60"],
+            "Accessories": ["https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1541140111813-8222e9d90981?w=500&auto=format&fit=crop&q=60"],
+            "Displays": ["https://images.unsplash.com/photo-1547119957-637f8679db1e?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1551645121-d1034da75057?w=500&auto=format&fit=crop&q=60"],
+            "Cameras": ["https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&auto=format&fit=crop&q=60"],
+            "Storage": ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=500&auto=format&fit=crop&q=60"],
+            "Smart Home": ["https://images.unsplash.com/photo-1558002038-1055907df827?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=60"],
+            "Gaming": ["https://images.unsplash.com/photo-1600861195091-690c92f1d2cc?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500&auto=format&fit=crop&q=60"]
+        };
+        const namesTemplate = {
+            "Audio": ["Pro Wireless Earbuds", "Studio Headphones", "Bluetooth Speaker", "Soundbar Bass"],
+            "Wearables": ["Fitness Tracker Elite", "Amoled Smart Watch", "GPS Sports Watch"],
+            "Accessories": ["Wireless Mouse", "RGB Mechanical Keyboard", "USB-C Multiport Hub"],
+            "Displays": ["27-inch 4K Monitor", "144Hz Gaming Screen", "Curved UltraWide Display"],
+            "Cameras": ["Mirrorless Camera", "Gimbal Stabilizer Pro", "4K Action Waterproof Cam"],
+            "Storage": ["2TB Portable SSD", "256GB High-Speed MicroSD", "Type-C Flash Drive"],
+            "Smart Home": ["Smart Video Doorbell", "Home Wi-Fi Security Camera", "Smart RGB LED Bulb"],
+            "Gaming": ["Wireless Gamepad", "Sim Steering Wheel", "Standalone VR Headset"]
+        };
+
+        const products = [];
+        for (let i = 1; i <= 52; i++) {
+            let cat = categories[(i - 1) % categories.length];
+            let imgs = imagePools[cat];
+            let img = imgs[(i - 1) % imgs.length];
+            let templates = namesTemplate[cat];
+            let baseName = templates[(i - 1) % templates.length];
+            
+            products.push({
+                id: `p_${i}`,
+                name: `${baseName} (Model-${i + 100})`,
+                price: 39 + ((i * 17) % 350),
+                category: cat,
+                img: img
+            });
+        }
+
+        let cart = [];
+        let currentFilter = "All";
+
+        // --- 2. Central Analytics Tracker Function ---
+        function trackAnalyticsEvent(eventName, eventData) {
+            console.log(`[Analytics Event: ${eventName}]`, eventData);
+            
+            // Visual output inside Custom Console
+            const logWindow = document.getElementById('live-logs');
+            const logNode = document.createElement('div');
+            logNode.innerHTML = `<span class="log-ev">[${eventName}]</span> ${JSON.stringify(eventData)}`;
+            logWindow.appendChild(logNode);
+            logWindow.scrollTop = logWindow.scrollHeight;
+
+            // Integrates natively if Google Tag Manager Data Layer exists
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: eventName,
+                ecommerce: eventData
+            });
+        }
+
+        // --- 3. Custom Router/Page Switcher ---
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Track page view event dynamically
+            trackAnalyticsEvent('page_view', { page_title: pageId, page_location: window.location.href + '#' + pageId });
+        }
+
+        // --- 4. Render Interface Components ---
+        function initShop() {
+            // Render Filter Buttons
+            const filterBar = document.getElementById('filter-bar');
+            const uniqueCats = ["All", ...categories];
+            filterBar.innerHTML = uniqueCats.map(cat => `
+                <button class="filter-btn ${currentFilter === cat ? 'active' : ''}" onclick="applyFilter('${cat}')">${cat}</button>
+            `).join('');
+
+            // Filter & Render Grid
+            const grid = document.getElementById('product-grid');
+            const filtered = currentFilter === "All" ? products : products.filter(p => p.category === currentFilter);
+            
+            grid.innerHTML = filtered.map(prod => `
+                <div class="product-card">
+                    <img src="${prod.img}" alt="${prod.name}" class="product-img" onclick="viewProductDetails('${prod.id}')" style="cursor:pointer;">
+                    <div class="product-info">
+                        <span class="product-cat">${prod.category}</span>
+                        <h3 class="product-title" onclick="viewProductDetails('${prod.id}')">${prod.name}</h3>
+                        <div class="product-meta">
+                            <span class="product-price">$${prod.price}</span>
+                            <button class="btn" onclick="addToCart('${prod.id}')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Trigger GA4 item list view event
+            trackAnalyticsEvent('view_item_list', {
+                item_list_name: currentFilter,
+                items: filtered.map((p, idx) => ({ item_id: p.id, item_name: p.name, index: idx, price: p.price, item_category: p.category }))
+            });
+        }
+
+        function applyFilter(cat) {
+            currentFilter = cat;
+            initShop();
+        }
+
+        // --- 5. Page 2 View Details Function ---
+        function viewProductDetails(id) {
+            const prod = products.find(p => p.id === id);
+            const content = document.getElementById('detail-content');
+            
+            content.innerHTML = `
+                <div>
+                    <img src="${prod.img}" alt="${prod.name}" class="detail-img">
+                </div>
+                <div>
+                    <span class="product-cat" style="font-size:14px;">${prod.category}</span>
+                    <h1 style="margin: 10px 0 20px 0; font-size: 28px;">${prod.name}</h1>
+                    <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px;">
+                        This premium hardware electronic product is perfectly set up for simulating web tracking scripts. Inspect click thresholds, triggers, and precise parameter structures in real-time.
+                    </p>
+                    <div style="display:flex; align-items:center; gap:30px;">
+                        <span style="font-size: 32px; font-weight: bold; color: var(--primary);">$${prod.price}</span>
+                        <button class="btn" style="padding: 12px 30px; font-size:16px;" onclick="addToCart('${prod.id}')">Add To Shopping Cart</button>
+                    </div>
+                </div>
+            `;
+            
+            navigateTo('detail-page');
+            trackAnalyticsEvent('view_item', {
+                value: prod.price,
+                items: [{ item_id: prod.id, item_name: prod.name, price: prod.price, item_category: prod.category }]
+            });
+        }
+
+        // --- 6. Page 3 Cart System ---
+        function addToCart(id) {
+            const prod = products.find(p => p.id === id);
+            cart.push(prod);
+            document.getElementById('cart-badge').innerText = cart.length;
+            
+            trackAnalyticsEvent('add_to_cart', {
+                value: prod.price,
+                items: [{ item_id: prod.id, item_name: prod.name, price: prod.price, item_category: prod.category }]
+            });
+            alert(`"${prod.name}" has been added to cart!`);
+        }
+
+        function openCart() {
+            navigateTo('cart-page');
+            const container = document.getElementById('cart-items-container');
+            const totalAmountSpan = document.getElementById('total-amount');
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); padding: 20px 0;">Your cart is empty. Add electronic items from home page to proceed.</p>`;
+                totalAmountSpan.innerText = "0";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <img src="${item.img}" class="cart-item-img">
+                            <div>
+                                <h4 style="font-size:16px;">${item.name}</h4>
+                                <span style="color: var(--text-muted); font-size:14px;">$${item.price}</span>
+                            </div>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+            }).join('');
+
+            totalAmountSpan.innerText = total;
+            trackAnalyticsEvent('view_cart', {
+                value: total,
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i.price, item_category: i.category }))
+            });
+        }
+
+        function removeFromCart(index) {
+            const removedItem = cart[index];
+            cart.splice(index, 1);
+            document.getElementById('cart-badge').innerText = cart.length;
+            
+            trackAnalyticsEvent('remove_from_cart', {
+                value: removedItem.price,
+                items: [{ item_id: removedItem.id, item_name: removedItem.name, price: removedItem.price }]
+            });
+            openCart();
+        }
+
+        // --- 7. Page 4 Checkout Simulation ---
+        function processCheckout() {
+            if (cart.length === 0) return alert("Your cart is empty!");
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const transactionId = "TRX-" + Math.floor(100000 + Math.random() * 900000);
+            
+            // Fire E-commerce Purchase Event
+            trackAnalyticsEvent('purchase', {
+                transaction_id: transactionId,
+                value: total,
+                currency: "USD",
+                tax: (total * 0.05).toFixed(2),
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i.price, item_category: i.category }))
+            });
+
+            // Reset App States
+            cart = [];
+            document.getElementById('cart-badge').innerText = "0";
+            navigateTo('success-page');
+        }
+
+        // App Initialization
+        window.onload = function() {
+            initShop();
+        };
+    </script>
+</body>
+</html>
