@@ -111,7 +111,6 @@
 </head>
 <body>
 
-    <!-- Header Navigation -->
     <header>
         <div class="nav-container">
             <div class="logo" onclick="navigateTo('home-page')">GADGET<span>FLUX</span></div>
@@ -122,10 +121,8 @@
         </div>
     </header>
 
-    <!-- Main Dynamic Content Container -->
     <div class="container">
         
-        <!-- PAGE 1: HOME -->
         <section id="home-page" class="page active">
             <div class="hero">
                 <h2>GA4 eCommerce Electronics Sandbox</h2>
@@ -135,25 +132,22 @@
             <div class="grid" id="product-grid"></div>
         </section>
 
-        <!-- PAGE 2: DETAIL -->
         <section id="detail-page" class="page">
             <span class="back-btn" onclick="navigateTo('home-page')">&larr; Back to Electronics Catalog</span>
             <div class="detail-wrapper" id="detail-content"></div>
         </section>
 
-        <!-- PAGE 3: CART -->
         <section id="cart-page" class="page">
             <div class="cart-wrapper">
                 <h2 style="margin-bottom: 20px; font-weight: 700;">Your Shopping Cart</h2>
                 <div id="cart-items-container"></div>
                 <div class="cart-total-section">
                     <div class="total-price">Grand Total: $<span id="total-amount">0</span></div>
-                    <button class="btn btn-success" style="padding: 12px 26px; font-size: 14px;" onclick="processCheckout()">Secure Checkout & Purchase</button>
+                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 14px;" onclick="processCheckout()">Secure Checkout & Purchase</button>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 4: SUCCESS (Pop-up/Page) -->
         <section id="success-page" class="page">
             <div class="success-box">
                 <div class="success-icon">✓</div>
@@ -164,10 +158,8 @@
         </section>
     </div>
 
-    <!-- Footer Section -->
     <footer>
         <div class="footer-container">
-            <!-- Contact Info -->
             <div class="footer-section">
                 <h3>Contact Details</h3>
                 <p><strong>Mobile:</strong> <a href="tel:+8801XXXXXXXXX" style="display:inline;">+8801XXXXXXXXX</a></p>
@@ -175,7 +167,6 @@
                 <p><strong>Location:</strong> Dhaka, Bangladesh</p>
             </div>
             
-            <!-- Social & Links -->
             <div class="footer-section">
                 <h3>Corporate Links</h3>
                 <a href="https://your-website.com" target="_blank">🌐 Official Website</a>
@@ -183,21 +174,17 @@
                 <a href="#home-page">🛒 Back to Shop Sandbox</a>
             </div>
             
-            <!-- 3 Embedded Free Tech Videos Box -->
             <div class="video-block">
-                <h3>Featured Showcase (3 Free Clips)</h3>
+                <h3>Featured Showcase (10s Clips)</h3>
                 <div class="video-grid">
-                    <!-- Video 1: Cinematic Drone / Tech Style -->
                     <div class="video-responsive">
-                        <iframe src="https://www.youtube.com/embed/9No-FiEInLA" title="Tech Video 1" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/9No-FiEInLA?start=0&end=10" title="Tech Video 1" allowfullscreen></iframe>
                     </div>
-                    <!-- Video 2: Cyberpunk / Neon Electronics Style -->
                     <div class="video-responsive">
-                        <iframe src="https://www.youtube.com/embed/2M7Z0SClGqE" title="Tech Video 2" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/2M7Z0SClGqE?start=0&end=10" title="Tech Video 2" allowfullscreen></iframe>
                     </div>
-                    <!-- Video 3: Abstract Future Tech -->
                     <div class="video-responsive">
-                        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" title="Tech Video 3" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY?start=0&end=10" title="Tech Video 3" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
