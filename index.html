@@ -3,433 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroLab Pro - Analytics Practice E-Commerce</title>
+    <title>GadgetFlux - 52 Unique Electronics Sandbox</title>
     <style>
-        /* Base Styling & Variables */
         :root {
-            --primary: #1e3a8a;
-            --primary-hover: #1d4ed8;
-            --accent: #10b981;
-            --bg-color: #f4f6f9;
+            --primary: #0f172a;       /* Dark Slate */
+            --primary-hover: #1e293b;
+            --accent: #2563eb;        /* Tech Blue */
+            --bg-color: #f8fafc;      /* Clean Studio White */
             --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 60px;
-        }
+        /* Navigation */
+        header { background-color: var(--card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); cursor: pointer; letter-spacing: 0.5px; }
+        .logo span { color: var(--accent); }
+        nav a { text-decoration: none; color: var(--text-main); font-weight: 500; margin-left: 25px; cursor: pointer; transition: color 0.2s; }
+        nav a:hover { color: var(--accent); }
+        .cart-link { position: relative; }
+        .cart-badge { position: absolute; top: -10px; right: -15px; background-color: var(--accent); color: white; font-size: 11px; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 
-        /* Navigation Bar */
-        header {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* Main Container */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; min-height: 60vh; }
+        
+        /* Hero Banner */
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; padding: 50px 40px; border-radius: 8px; margin-bottom: 35px; text-align: center; }
+        .hero h2 { font-size: 32px; margin-bottom: 10px; font-weight: 700; }
+        .hero p { color: #94a3b8; font-size: 16px; }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            margin-left: 20px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--primary-hover);
-        }
-
-        .cart-link {
-            position: relative;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -10px;
-            right: -15px;
-            background-color: #ef4444;
-            color: white;
-            font-size: 11px;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Layout Container */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* Hero & Filters */
-        .hero {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .hero h2 { margin-bottom: 10px; font-size: 28px; }
-
-        .filter-container {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .filter-btn {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        /* Category Filter Bar */
+        .filter-container { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 30px; padding-bottom: 5px; }
+        .filter-container::-webkit-scrollbar { height: 4px; }
+        .filter-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .filter-btn { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 22px; border-radius: 4px; cursor: pointer; font-weight: 600; white-space: nowrap; transition: all 0.2s; color: var(--text-muted); font-size: 13px; }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .filter-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
 
         /* Product Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 25px;
-        }
-
-        .product-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 200px;
-            object-cover: cover;
-            background-color: #f3f4f6;
-        }
-
-        .product-info {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .product-cat {
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .product-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            cursor: pointer;
-            line-height: 1.4;
-        }
-
-        .product-title:hover { color: var(--primary-hover); }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-        }
-
-        .product-price { font-size: 18px; font-weight: bold; }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .product-card { background-color: var(--card-bg); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.01); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--border-color); }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,0.05); }
+        .product-img { width: 100%; height: 240px; object-fit: cover; background-color: #f1f5f9; }
+        .product-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .product-cat { font-size: 11px; font-weight: 700; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .product-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; cursor: pointer; line-height: 1.4; }
+        .product-title:hover { color: var(--accent); }
+        .product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .product-price { font-size: 18px; font-weight: 700; }
+        
+        /* Buttons */
+        .btn { background-color: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 13px; text-transform: uppercase; }
         .btn:hover { background-color: var(--primary-hover); }
-        .btn-success { background-color: var(--accent); }
+        .btn-success { background-color: #10b981; }
         .btn-success:hover { background-color: #059669; }
 
-        /* Pages Setup (Hidden by default) */
+        /* SPA Pages visibility */
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Product Detail Page Styling */
-        .detail-wrapper {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
+        /* Product Details Page */
+        .detail-wrapper { background-color: var(--card-bg); padding: 40px; border-radius: 8px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; border: 1px solid var(--border-color); }
+        .detail-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 4px; background-color: #f1f5f9; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--text-muted); font-weight: 600; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .back-btn:hover { color: var(--accent); }
 
-        .detail-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; }
-        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: var(--primary); font-weight: 600; cursor: pointer; }
+        /* Cart Page */
+        .cart-wrapper { background-color: var(--card-bg); padding: 40px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item-info { display: flex; align-items: center; gap: 20px; }
+        .cart-item-img { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; background-color: #f1f5f9; }
+        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .remove-btn:hover { text-decoration: underline; }
+        .cart-total-section { text-align: right; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border-color); }
+        .total-price { font-size: 24px; font-weight: 700; margin-bottom: 15px; }
 
-        /* Cart Page Styling */
-        .cart-wrapper { background-color: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); }
-        .cart-item-info { display: flex; align-items: center; gap: 15px; }
-        .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-weight: 600; }
-        .cart-total-section { text-align: right; margin-top: 30px; }
-        .total-price { font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+        /* Order Success Page */
+        .success-box { background-color: var(--card-bg); padding: 60px; text-align: center; border-radius: 8px; border: 1px solid var(--border-color); max-width: 600px; margin: 40px auto; }
+        .success-icon { font-size: 50px; color: #10b981; margin-bottom: 20px; }
+        .success-box h2 { font-size: 24px; margin-bottom: 10px; font-weight: 700; }
+        .success-box p { color: var(--text-muted); margin-bottom: 30px; }
 
-        /* Order Success Page Styling */
-        .success-box { background-color: var(--card-bg); padding: 50px; text-align: center; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .success-icon { font-size: 60px; color: var(--accent); margin-bottom: 20px; }
+        /* Footer Styles */
+        footer { background-color: #0f172a; color: #f8fafc; padding: 50px 20px 20px 20px; margin-top: 60px; border-top: 4px solid var(--accent); }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
+        .footer-section { flex: 1; min-width: 250px; }
+        
+        /* Video Grid Dynamic Setup */
+        .video-block { flex: 2; min-width: 320px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
 
-        /* Analytics Live Console Log Widget */
-        .analytics-widget {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            width: 320px;
-            background-color: #0f172a;
-            color: #38bdf8;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
-            font-family: monospace;
-            font-size: 11px;
-            z-index: 1000;
-        }
-
-        .widget-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 5px; margin-bottom: 8px; font-weight: bold; color: #94a3b8; }
-        .widget-logs { hieght: 150px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-        .log-ev { color: #34d399; font-weight: bold; }
+        .footer-section h3, .video-block h3 { font-size: 16px; margin-bottom: 20px; color: #3b82f6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-section p, .footer-section a { color: #94a3b8; font-size: 14px; text-decoration: none; line-height: 1.8; display: block; margin-bottom: 10px; }
+        .footer-section a:hover { color: #ffffff; text-decoration: underline; }
+        
+        .video-responsive { overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; border: 0; }
+        
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #334155; color: #64748b; font-size: 13px; }
     </style>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M9LFKTFH');</script>
-<!-- End Google Tag Manager -->
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9LFKTFH"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
+    <!-- Header Navigation -->
     <header>
         <div class="nav-container">
-            <div class="logo" onclick="navigateTo('home-page')">⚡ ElectroLab Pro</div>
+            <div class="logo" onclick="navigateTo('home-page')">GADGET<span>FLUX</span></div>
             <nav>
-                <a onclick="navigateTo('home-page')">Home</a>
-                <a onclick="openCart()" class="cart-link">Cart 🛒 <span id="cart-badge" class="cart-badge">0</span></a>
+                <a onclick="navigateTo('home-page')">Home Shop</a>
+                <a onclick="openCart()" class="cart-link">Cart Bag 🛒 <span id="cart-badge" class="cart-badge">0</span></a>
             </nav>
         </div>
     </header>
 
+    <!-- Main Dynamic Content Container -->
     <div class="container">
         
+        <!-- PAGE 1: HOME -->
         <section id="home-page" class="page active">
             <div class="hero">
-                <h2>Electronics Analytics Sandbox</h2>
-                <p>৫২টি রিয়েল প্রোডাক্ট ভ্যারিয়েশন এবং ৪টি ডেডিকেটেড পেজ দিয়ে অ্যানালিটিক্স ট্র্যাকিং টেস্ট করুন।</p>
+                <h2>GA4 eCommerce Electronics Sandbox</h2>
+                <p>৫২টি সম্পূর্ণ ইউনিক ইলেকট্রনিক্স প্রোডাক্ট এবং ইন্টিগ্রেটেড পারচেজ ফানেল ট্র্যাকিং সিমুলেটর।</p>
             </div>
-            
-            <div class="filter-container" id="filter-bar">
-                </div>
-
-            <div class="grid" id="product-grid">
-                </div>
+            <div class="filter-container" id="filter-bar"></div>
+            <div class="grid" id="product-grid"></div>
         </section>
 
+        <!-- PAGE 2: DETAIL -->
         <section id="detail-page" class="page">
-            <span class="back-btn" onclick="navigateTo('home-page')">&larr; Back to Shop</span>
-            <div class="detail-wrapper" id="detail-content">
-                </div>
+            <span class="back-btn" onclick="navigateTo('home-page')">&larr; Back to Electronics Catalog</span>
+            <div class="detail-wrapper" id="detail-content"></div>
         </section>
 
+        <!-- PAGE 3: CART -->
         <section id="cart-page" class="page">
             <div class="cart-wrapper">
-                <h2 style="margin-bottom: 20px;">Your Shopping Cart</h2>
-                <div id="cart-items-container">
-                    </div>
+                <h2 style="margin-bottom: 20px; font-weight: 700;">Your Shopping Cart</h2>
+                <div id="cart-items-container"></div>
                 <div class="cart-total-section">
-                    <div class="total-price">Total: $<span id="total-amount">0</span></div>
-                    <button class="btn btn-success" onclick="processCheckout()">Place Order / Checkout</button>
+                    <div class="total-price">Grand Total: $<span id="total-amount">0</span></div>
+                    <button class="btn btn-success" style="padding: 12px 26px; font-size: 14px;" onclick="processCheckout()">Secure Checkout & Purchase</button>
                 </div>
             </div>
         </section>
 
+        <!-- PAGE 4: SUCCESS (Pop-up/Page) -->
         <section id="success-page" class="page">
             <div class="success-box">
                 <div class="success-icon">✓</div>
-                <h2 style="margin-bottom: 10px;">Order Placed Successfully!</h2>
-                <p style="color: var(--text-muted); margin-bottom: 25px;">আপনার পারচেজ ইভেন্টটি অ্যানালিটিক্স ডেটা লেয়ারে সাকসেসফুলি ফায়ার হয়েছে।</p>
-                <button class="btn" onclick="navigateTo('home-page')">Continue Shopping</button>
+                <h2>Order Successfully Placed!</h2>
+                <p>আপনার অর্ডারটি সম্পূর্ণ হয়েছে। GA4 ট্র্যাকিং রুলস অনুযায়ী কন্সোলে `purchase` অবজেক্ট পুশ হয়েছে।</p>
+                <button class="btn" onclick="navigateTo('home-page')">Reset Sandbox Shop</button>
             </div>
         </section>
-
     </div>
 
-    <div class="analytics-widget">
-        <div class="widget-header">
-            <span>📊 Analytics Log Console</span>
-            <span style="cursor:pointer; text-decoration: underline;" onclick="document.getElementById('live-logs').innerHTML=''">Clear</span>
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <!-- Contact Info -->
+            <div class="footer-section">
+                <h3>Contact Details</h3>
+                <p><strong>Mobile:</strong> <a href="tel:+8801XXXXXXXXX" style="display:inline;">+8801XXXXXXXXX</a></p>
+                <p><strong>Email:</strong> <a href="mailto:your-email@example.com" style="display:inline;">your-email@example.com</a></p>
+                <p><strong>Location:</strong> Dhaka, Bangladesh</p>
+            </div>
+            
+            <!-- Social & Links -->
+            <div class="footer-section">
+                <h3>Corporate Links</h3>
+                <a href="https://your-website.com" target="_blank">🌐 Official Website</a>
+                <a href="https://facebook.com/your-profile-id" target="_blank">🔗 Facebook Profile ID</a>
+                <a href="#home-page">🛒 Back to Shop Sandbox</a>
+            </div>
+            
+            <!-- 3 Embedded Free Tech Videos Box -->
+            <div class="video-block">
+                <h3>Featured Showcase (3 Free Clips)</h3>
+                <div class="video-grid">
+                    <!-- Video 1: Cinematic Drone / Tech Style -->
+                    <div class="video-responsive">
+                        <iframe src="https://www.youtube.com/embed/9No-FiEInLA" title="Tech Video 1" allowfullscreen></iframe>
+                    </div>
+                    <!-- Video 2: Cyberpunk / Neon Electronics Style -->
+                    <div class="video-responsive">
+                        <iframe src="https://www.youtube.com/embed/2M7Z0SClGqE" title="Tech Video 2" allowfullscreen></iframe>
+                    </div>
+                    <!-- Video 3: Abstract Future Tech -->
+                    <div class="video-responsive">
+                        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" title="Tech Video 3" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="widget-logs" id="live-logs">
-            <span style="color:#64748b">// Real-time event log ready...</span>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 GadgetFlux Studio. All Analytical Tracking Rights Reserved.</p>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // --- 1. Generation of 52 Electronics Products Data ---
-        const categories = ["Audio", "Wearables", "Accessories", "Displays", "Cameras", "Storage", "Smart Home", "Gaming"];
-        const imagePools = {
-            "Audio": ["https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&auto=format&fit=crop&q=60"],
-            "Wearables": ["https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&auto=format&fit=crop&q=60"],
-            "Accessories": ["https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1541140111813-8222e9d90981?w=500&auto=format&fit=crop&q=60"],
-            "Displays": ["https://images.unsplash.com/photo-1547119957-637f8679db1e?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1551645121-d1034da75057?w=500&auto=format&fit=crop&q=60"],
-            "Cameras": ["https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&auto=format&fit=crop&q=60"],
-            "Storage": ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=500&auto=format&fit=crop&q=60"],
-            "Smart Home": ["https://images.unsplash.com/photo-1558002038-1055907df827?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=60"],
-            "Gaming": ["https://images.unsplash.com/photo-1600861195091-690c92f1d2cc?w=500&auto=format&fit=crop&q=60", "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500&auto=format&fit=crop&q=60"]
-        };
+        const categories = ["Smartphones", "Audio & Sound", "Wearable Tech"];
+
+        // 52 Unique Permanent High-Quality Electronics Images from Unsplash
+        const imagePool52 = [
+            // Smartphones / Devices (18 Items)
+            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1565630916779-e303be97b6f5?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1592890288564-76628a30a657?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1574755393849-623942496936?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1536846862558-b80d25f0dbae?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1567581935884-3349723552ca?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1551645121-d1034da75057?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1558885561-56c2a4e2f3bc?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1520189123429-6a76ab9efa90?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=500&auto=format&fit=crop&q=60",
+
+            // Audio & Sound (17 Items)
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1558089687-f282ffcbd1d5?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1606220532402-1f600e89d71d?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1585231007777-33068007a541?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1578345218746-50a229b3d0f8?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1605462863863-10d9e47e15ee?w=500&auto=format&fit=crop&q=60",
+
+            // Wearable Tech (17 Items)
+            "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1517502884422-41eaaced0168?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1617043786394-f977fa12eddf?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1557935728-e6d1eaabe558?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1629224316170-f604427f56f8?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1510017803434-a899398421b3?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1533310266094-8898a078049e?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1506224477000-07aa8a76be0f?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&auto=format&fit=crop&q=60"
+        ];
+
         const namesTemplate = {
-            "Audio": ["Pro Wireless Earbuds", "Studio Headphones", "Bluetooth Speaker", "Soundbar Bass"],
-            "Wearables": ["Fitness Tracker Elite", "Amoled Smart Watch", "GPS Sports Watch"],
-            "Accessories": ["Wireless Mouse", "RGB Mechanical Keyboard", "USB-C Multiport Hub"],
-            "Displays": ["27-inch 4K Monitor", "144Hz Gaming Screen", "Curved UltraWide Display"],
-            "Cameras": ["Mirrorless Camera", "Gimbal Stabilizer Pro", "4K Action Waterproof Cam"],
-            "Storage": ["2TB Portable SSD", "256GB High-Speed MicroSD", "Type-C Flash Drive"],
-            "Smart Home": ["Smart Video Doorbell", "Home Wi-Fi Security Camera", "Smart RGB LED Bulb"],
-            "Gaming": ["Wireless Gamepad", "Sim Steering Wheel", "Standalone VR Headset"]
+            "Smartphones": ["Hyperion Pro X", "Nexus Alpha Device", "Quantum Fluid Frame", "Prism OLED Flagship"],
+            "Audio & Sound": ["SonicBoom Wireless Pods", "Studio Over-Ear HD", "Acoustic Pure Soundbar", "BassPulse Sport Buds"],
+            "Wearable Tech": ["Horizon Track Band v4", "Titanium Chrono Smart", "Apex Active Pro Guard", "VibeFit Core Sensor"]
         };
 
         const products = [];
         for (let i = 1; i <= 52; i++) {
             let cat = categories[(i - 1) % categories.length];
-            let imgs = imagePools[cat];
-            let img = imgs[(i - 1) % imgs.length];
-            let templates = namesTemplate[cat];
-            let baseName = templates[(i - 1) % templates.length];
+            let baseNameList = namesTemplate[cat];
+            let baseName = baseNameList[(i - 1) % baseNameList.length];
             
             products.push({
-                id: `p_${i}`,
-                name: `${baseName} (Model-${i + 100})`,
-                price: 39 + ((i * 17) % 350),
+                id: `elec_${100 + i}`,
+                name: `${baseName} (Model ${i})`,
+                price: 49 + ((i * 23) % 450), 
                 category: cat,
-                img: img
+                img: imagePool52[i - 1]
             });
         }
 
         let cart = [];
         let currentFilter = "All";
 
-        // --- 2. Central Analytics Tracker Function ---
         function trackAnalyticsEvent(eventName, eventData) {
-            console.log(`[Analytics Event: ${eventName}]`, eventData);
-            
-            // Visual output inside Custom Console
-            const logWindow = document.getElementById('live-logs');
-            const logNode = document.createElement('div');
-            logNode.innerHTML = `<span class="log-ev">[${eventName}]</span> ${JSON.stringify(eventData)}`;
-            logWindow.appendChild(logNode);
-            logWindow.scrollTop = logWindow.scrollHeight;
-
-            // Integrates natively if Google Tag Manager Data Layer exists
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: eventName,
                 ecommerce: eventData
             });
+            console.log(`🔌 [GA4 DataLayer Push: ${eventName}]`, window.dataLayer[window.dataLayer.length - 1]);
         }
 
-        // --- 3. Custom Router/Page Switcher ---
         function navigateTo(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
-
-            // Track page view event dynamically
-            trackAnalyticsEvent('page_view', { page_title: pageId, page_location: window.location.href + '#' + pageId });
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            
+            trackAnalyticsEvent('page_view', { page_title: pageId, page_location: window.location.href });
         }
 
-        // --- 4. Render Interface Components ---
         function initShop() {
-            // Render Filter Buttons
             const filterBar = document.getElementById('filter-bar');
-            const uniqueCats = ["All", ...categories];
-            filterBar.innerHTML = uniqueCats.map(cat => `
+            filterBar.innerHTML = ["All", ...categories].map(cat => `
                 <button class="filter-btn ${currentFilter === cat ? 'active' : ''}" onclick="applyFilter('${cat}')">${cat}</button>
             `).join('');
 
-            // Filter & Render Grid
             const grid = document.getElementById('product-grid');
             const filtered = currentFilter === "All" ? products : products.filter(p => p.category === currentFilter);
             
             grid.innerHTML = filtered.map(prod => `
                 <div class="product-card">
-                    <img src="${prod.img}" alt="${prod.name}" class="product-img" onclick="viewProductDetails('${prod.id}')" style="cursor:pointer;">
+                    <img src="${prod.img}" alt="${prod.name}" class="product-img" onclick="viewProductDetails('${prod.id}')" style="cursor:pointer;" loading="lazy">
                     <div class="product-info">
                         <span class="product-cat">${prod.category}</span>
                         <h3 class="product-title" onclick="viewProductDetails('${prod.id}')">${prod.name}</h3>
@@ -441,10 +336,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
             `).join('');
 
-            // Trigger GA4 item list view event
             trackAnalyticsEvent('view_item_list', {
                 item_list_name: currentFilter,
-                items: filtered.map((p, idx) => ({ item_id: p.id, item_name: p.name, index: idx, price: p.price, item_category: p.category }))
+                items: filtered.slice(0, 10).map((p, index) => ({
+                    item_id: p.id,
+                    item_name: p.name,
+                    index: index + 1,
+                    item_category: p.category,
+                    price: p.price
+                }))
             });
         }
 
@@ -453,36 +353,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             initShop();
         }
 
-        // --- 5. Page 2 View Details Function ---
         function viewProductDetails(id) {
             const prod = products.find(p => p.id === id);
-            const content = document.getElementById('detail-content');
-            
-            content.innerHTML = `
+            document.getElementById('detail-content').innerHTML = `
+                <img src="${prod.img}" class="detail-img" alt="${prod.name}">
                 <div>
-                    <img src="${prod.img}" alt="${prod.name}" class="detail-img">
-                </div>
-                <div>
-                    <span class="product-cat" style="font-size:14px;">${prod.category}</span>
-                    <h1 style="margin: 10px 0 20px 0; font-size: 28px;">${prod.name}</h1>
-                    <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px;">
-                        This premium hardware electronic product is perfectly set up for simulating web tracking scripts. Inspect click thresholds, triggers, and precise parameter structures in real-time.
+                    <span class="product-cat">${prod.category}</span>
+                    <h1 style="margin:12px 0 18px 0; font-size:28px; font-weight:700; color:var(--primary);">${prod.name}</h1>
+                    <p style="color:var(--text-muted); margin-bottom:30px; line-height:1.6; font-size:15px;">
+                        Engineered with industry-standard performance protocols. Designed for rigorous simulation, technical sandbox measurement, and precise GA4 tag integration testing parameters.
                     </p>
-                    <div style="display:flex; align-items:center; gap:30px;">
-                        <span style="font-size: 32px; font-weight: bold; color: var(--primary);">$${prod.price}</span>
-                        <button class="btn" style="padding: 12px 30px; font-size:16px;" onclick="addToCart('${prod.id}')">Add To Shopping Cart</button>
+                    <div style="display:flex; align-items:center; gap:25px; border-top:1px solid var(--border-color); padding-top:25px;">
+                        <span style="font-size:28px; font-weight:800;">$${prod.price}</span>
+                        <button class="btn" style="padding:12px 28px; font-size:14px;" onclick="addToCart('${prod.id}')">Add To Shopping Bag</button>
                     </div>
                 </div>
             `;
-            
             navigateTo('detail-page');
+            
             trackAnalyticsEvent('view_item', {
                 value: prod.price,
-                items: [{ item_id: prod.id, item_name: prod.name, price: prod.price, item_category: prod.category }]
+                currency: "USD",
+                items: [{ item_id: prod.id, item_name: prod.name, item_category: prod.category, price: prod.price, quantity: 1 }]
             });
         }
 
-        // --- 6. Page 3 Cart System ---
         function addToCart(id) {
             const prod = products.find(p => p.id === id);
             cart.push(prod);
@@ -490,84 +385,79 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             
             trackAnalyticsEvent('add_to_cart', {
                 value: prod.price,
-                items: [{ item_id: prod.id, item_name: prod.name, price: prod.price, item_category: prod.category }]
+                currency: "USD",
+                items: [{ item_id: prod.id, item_name: prod.name, item_category: prod.category, price: prod.price, quantity: 1 }]
             });
-            alert(`"${prod.name}" has been added to cart!`);
         }
 
         function openCart() {
             navigateTo('cart-page');
             const container = document.getElementById('cart-items-container');
-            const totalAmountSpan = document.getElementById('total-amount');
             
             if(cart.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-muted); padding: 20px 0;">Your cart is empty. Add electronic items from home page to proceed.</p>`;
-                totalAmountSpan.innerText = "0";
+                container.innerHTML = `<p style="color:var(--text-muted); padding:40px 0; text-align:center;">Your shopping bag is currently empty.</p>`;
+                document.getElementById('total-amount').innerText = "0";
                 return;
             }
-
-            let total = 0;
-            container.innerHTML = cart.map((item, index) => {
-                total += item.price;
-                return `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <img src="${item.img}" class="cart-item-img">
-                            <div>
-                                <h4 style="font-size:16px;">${item.name}</h4>
-                                <span style="color: var(--text-muted); font-size:14px;">$${item.price}</span>
-                            </div>
+            
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            container.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <img src="${item.img}" class="cart-item-img" alt="${item.name}">
+                        <div>
+                            <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">${item.name}</h4>
+                            <span style="color:var(--accent); font-size:14px; font-weight:700;">$${item.price}</span>
                         </div>
-                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
                     </div>
-                `;
-            }).join('');
+                    <button class="remove-btn" onclick="removeFromCart(${idx})">Remove</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('total-amount').innerText = total;
 
-            totalAmountSpan.innerText = total;
             trackAnalyticsEvent('view_cart', {
                 value: total,
-                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i.price, item_category: i.category }))
+                currency: "USD",
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, item_category: i.category, price: i.price }))
             });
         }
 
-        function removeFromCart(index) {
-            const removedItem = cart[index];
-            cart.splice(index, 1);
+        function removeFromCart(idx) {
+            const removedItem = cart[idx];
+            cart.splice(idx, 1);
             document.getElementById('cart-badge').innerText = cart.length;
             
             trackAnalyticsEvent('remove_from_cart', {
                 value: removedItem.price,
-                items: [{ item_id: removedItem.id, item_name: removedItem.name, price: removedItem.price }]
+                currency: "USD",
+                items: [{ item_id: removedItem.id, item_name: removedItem.name, item_category: removedItem.category, price: removedItem.price }]
             });
+            
             openCart();
         }
 
-        // --- 7. Page 4 Checkout Simulation ---
         function processCheckout() {
-            if (cart.length === 0) return alert("Your cart is empty!");
+            if (cart.length === 0) return alert("Bag is empty!");
             
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const transactionId = "TRX-" + Math.floor(100000 + Math.random() * 900000);
+            const generatedFakeTrxId = "ELEC-" + Math.floor(100000 + Math.random() * 900000);
             
-            // Fire E-commerce Purchase Event
             trackAnalyticsEvent('purchase', {
-                transaction_id: transactionId,
+                transaction_id: generatedFakeTrxId,
                 value: total,
                 currency: "USD",
-                tax: (total * 0.05).toFixed(2),
-                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i.price, item_category: i.category }))
+                shipping: 0,
+                tax: 0,
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, item_category: i.category, price: i.price, quantity: 1 }))
             });
 
-            // Reset App States
             cart = [];
             document.getElementById('cart-badge').innerText = "0";
             navigateTo('success-page');
         }
 
-        // App Initialization
-        window.onload = function() {
-            initShop();
-        };
+        window.onload = initShop;
     </script>
 </body>
 </html>
